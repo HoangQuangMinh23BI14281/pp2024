@@ -9,6 +9,6 @@ Students are expected to:
 Student Info
 =========================
 
-* Student Name: Hoàng Quang Minh 
+* Student Name: Hoang Quang Minh 
 * Student ID: 23BI14281
 
