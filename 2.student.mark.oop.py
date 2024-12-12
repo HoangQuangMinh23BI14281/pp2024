@@ -3,10 +3,16 @@ class Student:
         self.student_id = student_id
         self.name = name
 
+    def __str__(self):
+        return f"ID: {self.student_id} - Name: {self.name}"
+
 class Course:
     def __init__(self, course_id, name):
         self.course_id = course_id
         self.name = name
+
+    def __str__(self):
+        return f"ID: {self.course_id} - Course: {self.name}"
 
 class School:
     def __init__(self):
@@ -45,7 +51,7 @@ class School:
             print(course)
 
     def display_marks(self):
-        student_id = input("Nhap ID hoc sinh muon xem diem ")
+        student_id = input("Nhap ID hoc sinh muon xem diem: ")
         for student in self.students:
             if student.student_id == student_id:
                 print(f"Diem cua {student.name}:")
