@@ -41,7 +41,7 @@ class School:
         for course in self.courses:
             for student in self.students:
                 mark = float(input(f"Nhap diem cho Minh {student.name} trong {course.name}: "))
-                mark = math.floor(mark * 10)/10
+                mark = math.floor(mark*10)/10 
                 if student.student_id not in self.marks:
                     self.marks[student.student_id] = {}
                 self.marks[student.student_id][course.course_id] = mark
