@@ -1,5 +1,6 @@
 import math
 import numpy
+import curses
 
 class Student:
     def __init__(self, student_id, name):
@@ -10,9 +11,10 @@ class Student:
         return f"ID: {self.student_id} - Ten: {self.name}"
 
 class Course:
-    def __init__(self, course_id, name):
+    def __init__(self, course_id, name, credits):
         self.course_id = course_id
         self.name = name
+        self.credits = credits
 
     def __str__(self):
         return f"ID: {self.course_id} - Mon: {self.name}"
@@ -25,23 +27,23 @@ class School:
 
     def input_students(self):
         number_students = int(input("Nhap so hoc sinh: "))
-        for _ in range(number_students):
-            student_id = input("Nhap ID hoc sinh: ")
-            student_name = input("Nhap ten hoc sinh: ")
+        for i in range(1, number_students+1):
+            student_id = input(f"Nhap ID hoc sinh {i}: ")
+            student_name = input(f"Nhap ten hoc sinh {i}: ")
             self.students.append(Student(student_id, student_name))
 
     def input_courses(self):
-        number_courses = int(input("Nhap so mon hoc "))
-        for _ in range(number_courses):
-            course_id = input("Nhap ID mon hoc: ")
-            course_name = input("Nhap ten mon hoc:")
-            credits = int(input(f"Nhap so tin chi cua mon hoc"))
+        number_courses = int(input("Nhap so mon hoc: "))
+        for i in range(1, number_courses+1):
+            course_id = input(f"Nhap ID mon hoc {i}: ")
+            course_name = input(f"Nhap ten mon hoc {i}: ")
+            credits = int(input(f"Nhap so tin chi cua mon hoc: "))
             self.courses.append(Course(course_id, course_name, credits))
 
     def input_marks(self):
         for course in self.courses:
             for student in self.students:
-                mark = float(input(f"Nhap diem cho Minh {student.name} trong {course.name}: "))
+                mark = float(input(f"Nhap diem cho {student.name} trong {course.name}: "))
                 mark = math.floor(mark*10)/10 
                 if student.student_id not in self.marks:
                     self.marks[student.student_id] = {}
@@ -57,16 +59,20 @@ class School:
 
     def display_marks(self):
         student_id = input("Nhap ID hoc sinh muon xem diem: ")
+        student_found = False
         for student in self.students:
             if student.student_id == student_id:
+                student_found = True
                 print(f"Diem cua {student.name}:")
                 for course in self.courses:
-                    mark = self.marks[student_id].get(course.courses_id, None)
+                    mark = self.marks[student_id].get(course.course_id, None)
                     if mark is not None:
                         print(f"{course.name}: {mark}")
                     else:
                         print(f"{course.name}: khong co diem")
                 break
+        if not student_found:
+            print("hoc sinh khong ton tai")
 
     def GPA(self, student_id):
         total_credits = 0
@@ -77,7 +83,7 @@ class School:
             return 0
         
         for course in self.courses:
-            mark = self.marks[student_id].get(course.courses_id, None)
+            mark = self.marks[student_id].get(course.course_id, None)
             if mark is not None:
                 weighted_sum += mark * course.credits
                 total_credits += course.credits
@@ -88,32 +94,17 @@ class School:
         else:
             return 0
     
-    def quick_sort(self, arr, low, high):
-        if low < high:
-            pi = self.partition(arr, low, high)
-            self.quick_sort(arr, low, pi - 1)
-            self.quick_sort(arr, pi + 1, high)
-    
-    def partition(self, arr, low, high):
-        pivot = arr[high][1]
-        i = low -1
-        for j in range(low, high):
-            if arr[j][1] > pivot:
-                i +=1
-                arr[i], arr[j] = arr[j], arr[i]
-        arr[i+1], arr[high] = arr[high], arr[i+1]
-        return i+1
-
     def sort_GPA(self):
         student_gpa = []
         for student in self.students:
             gpa = self.GPA(student.student_id)
-            student_gpa.append(student, gpa)
-        self.quick_sort(student_gpa, low=0, high = len(student_gpa))
-    
-        for student, gpa in student_gpa:
-            print(f"{student.name} - GPA: {gpa:.2f}")
+            student_gpa.append((student, gpa))
 
+        sorted_array = numpy.sort(numpy.array(student_gpa, dtype=[('student', object), ('gpa', float)]), order='gpa')[::-1]
+
+        for entry in sorted_array:
+            student, gpa = entry
+            print(f"{student.name} - GPA: {gpa:.2f}")
 
     def run(self):
         self.input_students()
@@ -121,7 +112,7 @@ class School:
         self.input_marks()
 
         while True:
-            print("\n1. Xem thong tin mon hoc\n2. Xem thong tin mon hoc\n3. Xem diem hoc sinh\n4. Thoat")
+            print("\n1. Xem thong tin mon hoc\n2. Xem thong tin hoc sinh\n3. Xem diem hoc sinh\n4. Xep diem hoc sinh theo GPA\n5. Thoat")
             choice = input("Your choice: ")
 
             if choice == "1":
@@ -134,7 +125,7 @@ class School:
                 self.sort_GPA()
             elif choice == "5":
                 break
-            
+
 if __name__ == "__main__":
     school = School()
     school.run()
