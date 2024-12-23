@@ -7,7 +7,7 @@ class Student:
         self.name = name
 
     def __str__(self):
-        return f"ID: {self.student_id} - Name: {self.name}"
+        return f"ID: {self.student_id} - Ten: {self.name}"
 
 class Course:
     def __init__(self, course_id, name):
@@ -15,7 +15,7 @@ class Course:
         self.name = name
 
     def __str__(self):
-        return f"ID: {self.course_id} - Course: {self.name}"
+        return f"ID: {self.course_id} - Mon: {self.name}"
 
 class School:
     def __init__(self):
@@ -35,7 +35,8 @@ class School:
         for _ in range(number_courses):
             course_id = input("Nhap ID mon hoc: ")
             course_name = input("Nhap ten mon hoc:")
-            self.courses.append(Course(course_id, course_name))
+            credits = int(input(f"Nhap so tin chi cua mon hoc"))
+            self.courses.append(Course(course_id, course_name, credits))
 
     def input_marks(self):
         for course in self.courses:
@@ -60,9 +61,59 @@ class School:
             if student.student_id == student_id:
                 print(f"Diem cua {student.name}:")
                 for course in self.courses:
-                    mark = self.marks.get(student.student_id, {}).get(course.course_id, "No mark")
-                    print(f"{course.name}: {mark}")
+                    mark = self.marks[student_id].get(course.courses_id, None)
+                    if mark is not None:
+                        print(f"{course.name}: {mark}")
+                    else:
+                        print(f"{course.name}: khong co diem")
                 break
+
+    def GPA(self, student_id):
+        total_credits = 0
+        weighted_sum = 0
+
+        if student_id not in self.marks:
+            print("khong co hoc sinh")
+            return 0
+        
+        for course in self.courses:
+            mark = self.marks[student_id].get(course.courses_id, None)
+            if mark is not None:
+                weighted_sum += mark * course.credits
+                total_credits += course.credits
+
+        if total_credits != 0:
+            gpa = weighted_sum / total_credits
+            return gpa
+        else:
+            return 0
+    
+    def quick_sort(self, arr, low, high):
+        if low < high:
+            pi = self.partition(arr, low, high)
+            self.quick_sort(arr, low, pi - 1)
+            self.quick_sort(arr, pi + 1, high)
+    
+    def partition(self, arr, low, high):
+        pivot = arr[high][1]
+        i = low -1
+        for j in range(low, high):
+            if arr[j][1] > pivot:
+                i +=1
+                arr[i], arr[j] = arr[j], arr[i]
+        arr[i+1], arr[high] = arr[high], arr[i+1]
+        return i+1
+
+    def sort_GPA(self):
+        student_gpa = []
+        for student in self.students:
+            gpa = self.GPA(student.student_id)
+            student_gpa.append(student, gpa)
+        self.quick_sort(student_gpa, low=0, high = len(student_gpa))
+    
+        for student, gpa in student_gpa:
+            print(f"{student.name} - GPA: {gpa:.2f}")
+
 
     def run(self):
         self.input_students()
@@ -80,9 +131,10 @@ class School:
             elif choice == "3":
                 self.display_marks()
             elif choice == "4":
+                self.sort_GPA()
+            elif choice == "5":
                 break
-
-# Running the program
+            
 if __name__ == "__main__":
     school = School()
     school.run()

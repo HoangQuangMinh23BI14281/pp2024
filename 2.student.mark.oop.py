@@ -4,7 +4,7 @@ class Student:
         self.name = name
 
     def __str__(self):
-        return f"ID: {self.student_id} - Name: {self.name}"
+        return f"ID: {self.student_id} - Ten: {self.name}"
 
 class Course:
     def __init__(self, course_id, name):
@@ -12,7 +12,7 @@ class Course:
         self.name = name
 
     def __str__(self):
-        return f"ID: {self.course_id} - Course: {self.name}"
+        return f"ID: {self.course_id} - Mon: {self.name}"
 
 class School:
     def __init__(self):
@@ -78,7 +78,6 @@ class School:
             elif choice == "4":
                 break
 
-# Running the program
 if __name__ == "__main__":
     school = School()
     school.run()
