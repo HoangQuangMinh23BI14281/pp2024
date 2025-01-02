@@ -1,0 +1,11 @@
+def show_menu(stdscr):
+    stdscr.clear()
+    stdscr.addstr(0, 0, "1. Them hoc sinh")
+    stdscr.addstr(1, 0, "2. Them mon hoc")
+    stdscr.addstr(2, 0, "3. Xem diem hoc sinh")
+    stdscr.addstr(3, 0, "4. Xep diem hoc sinh theo GPA")
+    stdscr.addstr(4, 0, "5. Xem thong tin hoc sinh")
+    stdscr.addstr(5, 0, "6. Xem thong tin mon hoc")
+    stdscr.addstr(6, 0, "7. Thoat")
+    stdscr.addstr(7, 0, "Your choice: ")
+    stdscr.refresh()
