@@ -168,7 +168,6 @@ class School:
             else:
                 user_input += chr(char)  # Add the character to the input string
 
-            # Display the current input in the window
             stdscr.clear()
             stdscr.addstr(f"{prompt}{user_input}")
             stdscr.refresh()
@@ -208,4 +207,4 @@ class School:
             stdscr.getch()
 
 if __name__ == "__main__":
-    curses.wrapper(lambda stdscr: School().run(stdscr))
+    curses.wrapper(lambda stdscr:School().run(stdscr))
